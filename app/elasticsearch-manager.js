@@ -1,47 +1,23 @@
 const { Client } = require('@elastic/elasticsearch')
-const client = new Client({ node: 'http://localhost:9200' })
-const request = require('request');
+const client = new Client({ node: 'http://es01:9200' }) // Rodar no container
+// const client = new Client({ node: 'http://localhost:9200' }) // Rodar local
 
-
+// Promessa que só retorna quando o Elastic Search está disponível
 function whenElasticIsReady() {
     return new Promise((resolve, reject) => {
         waiting = setInterval(() => {
             client.search({
                 index: 'logs'
             }, (err, res) => {
-                console.log(!err);
-                console.log(err);
-                if (res)
-                    console.log(res.statusCode);
-
                 if (res.statusCode && res.statusCode != 400) {
-                    console.log("ES pronto...");
+                    console.log("ES disponível... salvando logs...");
                     clearInterval(waiting);
                     resolve();
                 } else {
-                    console.log("ES não respondeu, aguardando por 5s...");
+                    console.log("ES ainda não está disponível, aguardando por 7s...");
                 }
             })
-        }, 5000)
-
-
-        // waiting = setInterval(() => {
-        //     request.get("http://127.0.0.1:9200/", ((err, res) => {
-
-        //         console.log(!err);
-        //         console.log(err);
-
-        //         if (res)
-        //             console.log(res.statusCode);
-
-        //         if (!err && res.statusCode == 200) {
-        //             console.log("ES pronto...");
-        //             clearInterval(waiting);
-        //             resolve();
-        //         }
-        //         console.log("ES não respondeu, aguardando por 5s...");
-        //     }))
-        // }, 5000)
+        }, 7000)
     })
 }
 
@@ -52,18 +28,11 @@ async function saveLog(msg, result) {
         body: {
             timestamp: new Date(),
             log: {
-                agora: true,
                 msg: msg,
                 result: JSON.stringify(result)
             }
         }
-    }, ((err, resp, status) => {
-        if (err) {
-            console.log("$$$$$$$$$$ ERRO $$$$$$$$$$");
-            console.log(err);
-            return;
-        }
-    }))
+    })
 }
 
 module.exports = { saveLog, whenElasticIsReady }
