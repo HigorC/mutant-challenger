@@ -1,22 +1,13 @@
-const request = require('request');
-const execises = require("./exercises");
-const esManager = require("./elasticsearch-manager");
+const express = require('express');
+const app = express();
+const routes = require('./routes');
 
-request.get(process.env.URL_GET_USERS, ((err, res) => {
-    if (err) {
-        console.log("Erro ao obter dados base");
-        return;
-    }
+const port = 3000;
 
-    const responseJson = JSON.parse(res.body);
+app.use(express.json());
 
-    const exercise_1 = execises.exercise_1(responseJson);
-    const exercise_2 = execises.exercise_2(responseJson);
-    const exercise_3 = execises.exercise_3(responseJson);
+app.use('/', routes);
 
-    esManager.whenElasticIsReady().then(res => {
-        esManager.saveLog("Exercício 1 - Websites de todos os usuários", (exercise_1));
-        esManager.saveLog("Exercício 2 - Nomes, emails e empresas, ordenados pelo nome", exercise_2);
-        esManager.saveLog("Exercício 3 - Todos os usuários que possuem 'suite' no endereço", exercise_3);
-    })
-}))
+app.listen(port, () => {
+    console.log(`>> A todo vapor na porta ${port}!\n`);
+});

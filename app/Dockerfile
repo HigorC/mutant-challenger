@@ -16,4 +16,6 @@ ENV URL_CLIENT_ES="http://es01:9200"
 
 RUN npm test
 
+EXPOSE 3000
+
 CMD ["npm", "start"]
