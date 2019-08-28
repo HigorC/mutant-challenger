@@ -1,11 +1,10 @@
 const request = require("request");
-const base_url = "https://jsonplaceholder.typicode.com/users"
 const execises = require("../exercises");
 
 describe("Test of exercises.js", () => {
 
     beforeAll((done) => {
-        request.get(base_url, ((err, res) => {
+        request.get(process.env.URL_GET_USERS, ((err, res) => {
             // Variável global para não ter que fazer vários requests
             objResponse = JSON.parse(res.body);
             done();

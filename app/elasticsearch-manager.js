@@ -1,6 +1,5 @@
 const { Client } = require('@elastic/elasticsearch')
-const client = new Client({ node: 'http://es01:9200' }) // Rodar no container
-// const client = new Client({ node: 'http://localhost:9200' }) // Rodar local
+const client = new Client({ node: process.env.URL_CLIENT_ES }) 
 
 // Promessa que só retorna quando o Elastic Search está disponível
 function whenElasticIsReady() {
@@ -23,6 +22,8 @@ function whenElasticIsReady() {
 
 async function saveLog(msg, result) {
     console.log("Salvando log...");
+    console.log(msg);
+    console.log(result);
     
     await client.index({
         index: 'logs',

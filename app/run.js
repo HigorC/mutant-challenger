@@ -2,7 +2,7 @@ const request = require('request');
 const execises = require("./exercises");
 const esManager = require("./elasticsearch-manager");
 
-request.get("https://jsonplaceholder.typicode.com/users", ((err, res) => {
+request.get(process.env.URL_GET_USERS, ((err, res) => {
     if (err) {
         console.log("Erro ao obter dados base");
         return;

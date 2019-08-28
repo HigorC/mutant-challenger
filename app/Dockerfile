@@ -10,8 +10,10 @@ RUN node node_modules/jasmine/bin/jasmine init
 
 COPY . .
 
-RUN npm test
+ENV URL_GET_USERS="https://jsonplaceholder.typicode.com/users"
 
-EXPOSE 3000
+ENV URL_CLIENT_ES="http://es01:9200"
+
+RUN npm test
 
 CMD ["npm", "start"]
