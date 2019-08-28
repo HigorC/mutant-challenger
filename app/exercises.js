@@ -1,5 +1,9 @@
 function exercise_1(responseJson) {
-    return responseJson.map(user => user.website);
+    return responseJson.map(user => {
+        return {
+            website: user.website
+        }
+    });
 }
 
 function exercise_2(responseJson) {

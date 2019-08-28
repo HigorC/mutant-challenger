@@ -10,7 +10,7 @@ function whenElasticIsReady() {
                 index: 'logs'
             }, (err, res) => {
                 if (res.statusCode && res.statusCode != 400) {
-                    console.log("ES disponível... salvando logs...");
+                    console.log("ES disponível...");
                     clearInterval(waiting);
                     resolve();
                 } else {
@@ -22,14 +22,16 @@ function whenElasticIsReady() {
 }
 
 async function saveLog(msg, result) {
+    console.log("Salvando log...");
+    
     await client.index({
         index: 'logs',
-        type: "object",
+        type: "log",
         body: {
             timestamp: new Date(),
             log: {
                 msg: msg,
-                result: JSON.stringify(result)
+                result: result
             }
         }
     })
